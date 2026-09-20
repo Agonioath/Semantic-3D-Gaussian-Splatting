@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <!-- Meta tags for social media banners, these should be filled in appropriatly as they are your "business card" -->
+  <!-- Replace the content tag with appropriate information -->
+  <meta name="description" content="DESCRIPTION META TAG">
+  <meta property="og:title" content="PointVLA"/>
+  <meta property="og:description" content="PointVLA: Injecting the 3D World into Vision-Language-Action Models"/>
+  <meta property="og:url" content="URL OF THE WEBSITE"/>
+  <!-- Path to banner image, should be in the path listed below. Optimal dimenssions are 1200X630-->
+  <!-- <meta property="og:image" content="static/image/etvla-banner.jpg" /> -->
+  <meta property="og:image:width" content="1200"/>
+  <meta property="og:image:height" content="600"/>
+
+
+  <meta name="twitter:title" content="PointVLA">
+  <meta name="twitter:description" content="PointVLA: Injecting the 3D World into Vision-Language-Action Models">
+  <!-- Path to banner image, should be in the path listed below. Optimal dimenssions are 1200X600-->
+  <meta name="twitter:image" content="static/images/etvla-banner.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <!-- Keywords for your paper to be indexed by-->
+  <meta name="keywords" content="PointVLA, machine learning, open source, Visual Language Model, VLA">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+  <title>PointVLA: Injecting the 3D World into Vision-Language-Action Models</title>
+  <link rel="icon" type="image/x-icon" href="static/images/favicon.ico">
+  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro"
+  rel="stylesheet">
+
+  <link rel="stylesheet" href="static/css/bulma.min.css">
+  <link rel="stylesheet" href="static/css/bulma-carousel.min.css">
+  <link rel="stylesheet" href="static/css/bulma-slider.min.css">
+  <link rel="stylesheet" href="static/css/fontawesome.all.min.css">
+  <link rel="stylesheet"
+  href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+  <link rel="stylesheet" href="static/css/index.css">
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://documentcloud.adobe.com/view-sdk/main.js"></script>
+  <script defer src="static/js/fontawesome.all.min.js"></script>
+  <script src="static/js/bulma-carousel.min.js"></script>
+  <script src="static/js/bulma-slider.min.js"></script>
+  <script src="static/js/index.js"></script>
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/splidejs/3.6.12/css/splide.min.css">
+
+  <style>
+      /* Splide pagination customization */
+      .splide__pagination__page {
+          background: rgb(51, 51, 51);
+      }
+      .splide__pagination__page.is-active {
+          background: rgb(185, 85, 85);
+      }
+
+      /* Ensure videos are displayed side by side */
+      .splide__slide {
+          padding: 0 10px; /* Add some space between slides */
+      }
+
+      .video-container {
+          position: relative;
+      }
+
+      .speed-label {
+          position: absolute;
+          bottom: 0.5rem;
+          right: 1rem;
+          background: rgba(255, 255, 255, 0.85);
+          color: #4a4a4a;
+          padding: 0.5rem;
+          border-radius: 0.5rem;
+      }
+
+      /* Container width control */
+      #container {
+          max-width: 90%;
+          margin: auto;
+      }
+
+
+      video, img {
+          width: 100%;
+          border-radius: 8px;
+      }
+      .wrapper {
+    position: relative;  /* 固定在屏幕上，滚动时不动 */
+    top: 0%;         /* 垂直居中 */
+    left: 40%;        /* 水平居中 */
+    transform: translate(-50%, -50%); /* 调整位置，使得真正居中 */
+    width: 300px;     /* 可以根据需求调整宽度 */
+    padding: 20px;    /* 内边距，给内容一些空间 */
+  }
+
+  .collapsed {
+    height: 8rem;
+  }
+
+  .collapsed h1 {
+    padding-top: 200%;
+  }
+  .text-container {
+    position: relative;
+    font-family: 'Arial', sans-serif;
+    font-size: 150px;
+    font-weight: bold;
+
+    color: white;
+    width: 70%;
+    white-space: nowrap; /* 防止换行 */
+    text-align: center; /* 居中对齐 */
+  }
+
+  /* .relative {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+  } */
+
+  .text-container .text {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 1;
+    color: transparent; /* 镂空效果 */
+  }
+
+  .text-container .text-3 {
+    color: rgba(63, 93, 163, 0.6); /* 蓝色 */
+    transform: translate(-10px, -10px);
+    -webkit-text-stroke: 2px rgba(63, 93, 163, 0.9); /* 字体边框 */
+  }
+
+  .text-container .text-2 {
+    color: rgba(145, 190, 92, 0.6); /* 绿色 */
+    transform: translate(0px, 0px);
+    -webkit-text-stroke: 2px rgba(145, 190, 92, 0.9); /* 字体边框 */
+  }
+
+  .text-container .text-1 {
+    color: rgba(165, 74, 76, 0.6); /* 红色 */
+    transform: translate(10px, 10px);
+    -webkit-text-stroke: 2px rgba(165, 74, 76, 0.9); /* 字体边框 */
+  }
+
+  </style>
+
+</head>
+<body>
+
+  <section class="hero">
+    <div class="hero-body">
+      <div class="container is-max-desktop">
+        <div class="columns is-centered">
+          <div class="column has-text-centered">
+            <h1 class="title is-1 publication-title">
+
+              <span style="font-size:2.4rem;">
+                PointVLA: Injecting the 3D World into Vision-Language-Action Models
+              </span>
+            </h1>
+            <div class="is-size-5 publication-authors">
+
+              <!-- Paper authors -->
+              <span class="px-2">
+                Chengmeng Li
+              </a><sup>1</sup>
+              </span>
+              <span class="author-block" style="margin-right: 10px;">
+                Junjie Wen
+              </a><sup>2</sup></span>
+
+              <span class="author-block" style="margin-right: 10px;">
+                Yaxin Peng
+              </a><sup>1,†</sup></span>
+
+              <span class="author-block" style="margin-right: 10px;">
+                Yan Peng
+              </a><sup>1</sup></span>
+
+              <span class="author-block">
+                Yichen Zhu
+              </a><sup>2,†</sup></span>
+            </div>
+
+            <div class="is-size-5 publication-authors">
+
+              <span class="author-block" style="color: rgb(145, 143, 143); margin-right: 10px;">
+                <sup>1</sup>Shanghai University</span>
+
+              <span class="author-block" style="color: rgb(145, 143, 143); margin-right: 10px;">
+                <sup>2</sup>Midea Group</span>
+
+              <span class="eql-cntrb" style="color: rgb(106, 101, 101);">
+                <small><br><sup>†</sup> Indicates Corresponding author. This work was done during Chengmeng Li's internship in Midea Group.</small></span>
+              </span>
+            
+            </div>
+
+              </span>
+            <span style="color: rgb(0, 0, 0);" class="px-2">Accepted by IEEE Robotics and Automation Letters (RA-L) 2025.</span>
+                  <div class="column has-text-centered">
+                    <div class="publication-links">
+                         <!-- Arxiv PDF link -->
+                      <span class="link-block">
+                        <a href="https://arxiv.org/pdf/2503.07511" target="_blank"
+                        class="external-link button is-normal is-rounded is-dark">
+                        <span class="icon">
+                          <i class="fas fa-file-pdf"></i>
+                        </span>
+                        <span>Paper</span>
+                        </a>
+                      </span>
+
+                <!-- ArXiv abstract Link -->
+                <span class="link-block">
+                  <a href="https://arxiv.org/abs/2503.07511" target="_blank"
+                  class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                    <i class="ai ai-arxiv"></i>
+                  </span>
+                  <span>arXiv</span>
+                </a>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<section class="hero teaser">
+  <div class="container is-max-desktop">
+    <img src="static/images/pointvla_overall.png">
+  </div>
+</section>
+
+<!-- Paper abstract -->
+<section class="section hero is-light" style="margin-bottom: 3rem;">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Abstract</h2>
+        <div class="content has-text-justified">
+          <p>
+
+            Vision-Language-Action (VLA) models excel at robotic tasks by leveraging large-scale 2D vision-language pretraining, but their reliance on RGB images limits spatial reasoning critical for real-world interaction. Retraining these models with 3D data is computationally prohibitive, while discarding existing 2D datasets wastes valuable resources. To bridge this gap, we propose PointVLA, a framework that enhances pre-trained VLAs with point cloud inputs without requiring retraining. Our method freezes the vanilla action expert and injects 3D features via a lightweight modular block. To identify the most effective way of integrating point cloud representations, we conduct a skip-block analysis to pinpoint less useful blocks in the vanilla action expert, ensuring that 3D features are injected only into these blocks—minimizing disruption to pre-trained representations. Extensive experiments demonstrate that PointVLA outperforms state-of-the-art 2D imitation learning methods, such as OpenVLA, Diffusion Policy and DexVLA, across both simulated and real-world robotic tasks. Specifically, we highlight several key advantages of PointVLA enabled by point cloud integration: (1) Few-shot multi-tasking, where PointVLA successfully performs four different tasks using only 20 demonstrations each; (2) Real-vs-photo discrimination, where PointVLA distinguishes real objects from their images, leveraging 3D world knowledge to improve safety and reliability; (3) Height adaptability, Unlike conventional 2D imitation learning methods, PointVLA enables robots to adapt to objects at varying table height that unseen in train data. Furthermore, PointVLA achieves strong performance in long-horizon tasks, such as picking and packing objects from a moving conveyor belt, showcasing its ability to generalize across complex, dynamic environments.
+
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- End paper abstract -->
+
+<section class="hero is-small">
+  <div class="container is-max-desktop">
+    <div class="column is-centered">
+      <h2 class="title is-3">Long Horizon Task</h2>
+      <div class="columns is-vcentered interpolation-panel" style="background-color: #f0f0f0; border-radius: 10px; padding: 1rem; margin-bottom: 2rem;">
+        <div class="column has-text-centered" style="flex: 2 1 66%;">
+          <h5 style="font-size: 1.5rem; margin-bottom: 1rem;">
+            <b>Pick up moving objects and pack the box</b>
+          </h5>
+          <video autoplay controls muted loop playsinline style="width:640px; height:auto;">
+            <source src="static/videos/experiments/long_horizon.mp4" type="video/mp4">
+          </video>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="hero is-small">
+  <div class="container is-fluid">
+    <div class="column is-centered">
+      <h2 class="title is-3">Real-vs-Photo Discrimination</h2>
+      <div class="columns is-vcentered interpolation-panel" style="background-color: #f0f0f0; border-radius: 10px; padding: 1rem; margin-bottom: 2rem;">
+        <div class="column has-text-centered">
+          <h5 style="font-size:18px;">
+            <b>PointVLA:</b>
+            <br>A real object
+          </h5>
+          <video autoplay controls muted loop playsinline style="width:720px; height:auto;">
+            <source src="static/videos/experiments/real_object.mp4" type="video/mp4">
+          </video>
+          <h5 style="font-size:18px;">✅ Grab the object</h5>
+        </div>
+        <div class="column has-text-centered">
+          <h5 style="font-size:18px;">
+            <b>PointVLA:</b>
+            <br>A photo of object
+          </h5>
+          <video autoplay controls muted loop playsinline style="width:720px; height:auto;">
+            <source src="static/videos/experiments/fake_object.mp4" type="video/mp4">
+          </video>
+          <h5 style="font-size:18px;">✅ Stay still</h5>
+        </div>
+        <div class="column has-text-centered">
+          <h5 style="font-size:18px;">
+            <b>DexVLA:</b>
+            <br>A photo of object
+          </h5>
+          <video autoplay controls muted loop playsinline style="width:720px; height:auto;">
+            <source src="static/videos/experiments/dexvla_fail.mp4" type="video/mp4">
+          </video>
+          <h5 style="font-size:18px;">❌ Grab the photo</h5>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="hero is-small">
+  <div class="container is-max-desktop">
+    <div class="column is-centered">
+      <h2 class="title is-3">Height Adaptability</h2>
+
+        <div class="columns is-vcentered interpolation-panel" style="background-color: #f0f0f0; border-radius: 10px; padding: 1rem; margin-bottom: 2rem;">
+          <div class="column has-text-centered">
+            <h5 style="font-size: 1.5rem; margin-bottom: 1rem;">
+              <b>Evaluate at a height of 3 mm</b>
+            </h5>
+            <video autoplay controls muted loop playsinline width="25%">
+              <source src="static/videos/experiments/train_height.mp4" type="video/mp4">
+            </video>
+          </div>
+          <div class="column has-text-centered">
+            <h5 style="font-size: 1.5rem; margin-bottom: 1rem;">
+              <b>Evaluate at a height of 52mm</b>
+            </h5>
+            <video autoplay controls muted loop playsinline width="25%">
+              <source src="static/videos/experiments/test_height.mp4" type="video/mp4">
+            </video>
+          </div>
+        </div>
+    </div>
+  </div>
+</section>
+
+<section class="hero is-small">
+  <div class="container is-max-desktop">
+    <div class="column is-centered">
+      <h2 class="title is-3">Few-Shot Multi-Tasking</h2>
+      <div class="column has-text-centered" style="flex: 2 1 66%;">
+        <video autoplay controls muted loop playsinline width="25%">
+          <source src="static\videos\experiments\few_shot.mp4" type="video/mp4">
+        </video>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="hero is-small">
+  <div class="container is-max-desktop">
+    <h2 class="title is-3">Real-world Experiments Results</h2>
+    <div class="columns is-vcentered">
+      <div class="column has-text-centered">
+        <img src="static/images/aloha_results.png" alt="First Image" style="max-width: 100%; height: auto;">
+      </div>
+      <div class="column has-text-centered">
+        <img src="static/images/ur_results.png" alt="Second Image" style="max-width: 100%; height: auto;">
+      </div>
+    </div>
+  </div>
+</section>
+
+<!--BibTex citation -->
+  <section class="section" id="BibTeX">
+    <div class="container is-max-desktop content">
+      <h2 class="title">BibTeX</h2>
+      <pre><code>@misc{li2025pointvlainjecting3dworld,
+        title={PointVLA: Injecting the 3D World into Vision-Language-Action Models}, 
+        author={Chengmeng Li and Junjie Wen and Yan Peng and Yaxin Peng and Feifei Feng and Yichen Zhu},
+        year={2025},
+        eprint={2503.07511},
+        archivePrefix={arXiv},
+        primaryClass={cs.RO},
+        url={https://arxiv.org/abs/2503.07511}, 
+  }</code></pre>
+    </div>
+</section>
+<!--End BibTex citation -->
+
+<footer class="footer">
+  <div class="container">
+    <div class="columns is-centered">
+      <div class="column is-8">
+        <div class="content">
+
+          <p>
+            This page was built using the <a href="https://github.com/eliahuhorwitz/Academic-project-page-template" target="_blank">Academic Project Page Template</a> which was adopted from the <a href="https://nerfies.github.io" target="_blank">Nerfies</a> project page.
+            You are free to borrow the source code of this website, we just ask that you link back to this page in the footer. <br> This website is licensed under a <a rel="license"  href="http://creativecommons.org/licenses/by-sa/4.0/" target="_blank">Creative
+            Commons Attribution-ShareAlike 4.0 International License</a>.
+          </p>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- Statcounter tracking code -->
+  
+<!-- You can add a tracker to track page visits by creating an account at statcounter.com -->
+
+    <!-- End of Statcounter Code -->
+
+  </body>
+  </html>
